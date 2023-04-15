@@ -2,6 +2,7 @@ import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import React, { useState } from 'react';
 import { Alert, Button, Card, Form } from 'react-bootstrap';
 import { FaGithub, FaGoogle, FaLinkedin, FaTwitter } from 'react-icons/fa';
+import { Link } from "react-router-dom";
 import app from '../../firebase/firebase.config';
 
 const auth = getAuth(app)
@@ -15,11 +16,14 @@ const Register = () => {
         event.preventDefault();
         setSuccess('');
         // collect form data
-        const email = event.target.email.value;
-        const password = event.target.password.value;
+        const form = event.target;
+        const email = form.email.value;
+        const password = form.password.value;
         console.log(email, password);
+
+
         //*email validation
-        if(!/^(?=.*[A-Z]).+$/.test(password)){
+        if(!/(?=.*[A-Z])/.test(password)){
             setError('Please add atleast 1 uppercase');
             return
           } else if (!/(?=.*\d)/.test(password)) {
@@ -28,8 +32,8 @@ const Register = () => {
           } else if (!/(?=.*[!@#$%^&*])/.test(password)) {
             setError("Password should contain at least one special character") ;
             return ;
-          } else if (password.length < 7){
-            setError('Password Must be at least more than 7 carecter')
+          } else if (password.length < 6){
+            setError('Password Must be at least more than 6 carecter')
             return
           }
         // create User in fireBase
@@ -39,7 +43,7 @@ const Register = () => {
             console.log(loggedUser);
             setError('')
             event.target.reset();
-            setSuccess('Welcome to Xadu.life');
+            setSuccess('Welcome to the magic world');
         }).catch(error =>{
             console.error(error.message);
             setError(error.message);
@@ -86,6 +90,8 @@ const Register = () => {
             {error && <Alert variant="danger" style={{color: 'red'}}>{error}</Alert>}
             {success && <Alert variant="danger" style={{color: 'green'}}>{success}</Alert>}
             <Button variant="primary" type="submit" style={{ marginTop: '.2rem' }}>Register </Button>
+
+            <p><small>Already Have an Account? Please  <Link to='/login'>LogIn</Link></small></p>
             <hr />
             <div style={{ display: 'flex', justifyContent: 'center' }}>
                     <Button variant="light" style={{ margin: '.5rem' }}>
