@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, sendEmailVerification } from "firebase/auth";
 import React, { useState } from 'react';
 import { Alert, Button, Card, Form } from 'react-bootstrap';
 import { FaGithub, FaGoogle, FaLinkedin, FaTwitter } from 'react-icons/fa';
@@ -44,12 +44,23 @@ const Register = () => {
             setError('')
             event.target.reset();
             setSuccess('Welcome to the magic world');
+
+            sendVerificationEmail(result.user);
+
         }).catch(error =>{
             console.error(error.message);
             setError(error.message);
             
         } )
         
+    }
+
+    const sendVerificationEmail = (user) => {
+            sendEmailVerification(user)
+            .then(result => {
+                console.log(result)
+                alert('please verify your email address')
+            })
     }
 
     const handleEmailChange = (event) => {

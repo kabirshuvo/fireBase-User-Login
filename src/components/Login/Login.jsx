@@ -54,6 +54,9 @@ const LoginPage = () => {
         const loggedUser = result.user;
         setSuccess('Welcome to the Magic world');
         console.log(loggedUser);
+        if(!loggedUser.emailVerified){
+            
+        }
       }).catch(error => {
         console.error(error);
         setError(error.message);
