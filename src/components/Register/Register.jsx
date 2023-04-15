@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, getAuth, sendEmailVerification } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, sendEmailVerification, updateProfile } from "firebase/auth";
 import React, { useState } from 'react';
 import { Alert, Button, Card, Form } from 'react-bootstrap';
 import { FaGithub, FaGoogle, FaLinkedin, FaTwitter } from 'react-icons/fa';
@@ -44,8 +44,8 @@ const Register = () => {
             setError('')
             event.target.reset();
             setSuccess('Welcome to the magic world');
-
             sendVerificationEmail(result.user);
+            updateUserData(result.user, name);
 
         }).catch(error =>{
             console.error(error.message);
@@ -61,6 +61,17 @@ const Register = () => {
                 console.log(result)
                 alert('please verify your email address')
             })
+    }
+    const updateUserData = (user, name) => {
+        updateProfile(user, {
+            displayName: name
+        })
+        .then(()=>{
+            console.log('user name updated')
+        })
+        .catch(erreo => {
+            setError(error.message);
+        })
     }
 
     const handleEmailChange = (event) => {
@@ -78,10 +89,21 @@ const Register = () => {
     return (
         <Card style={{ width: '20rem', float: 'right' }}>
         <Card.Body>
-        <Card.Title style={{textAlign: 'center', marginBottom: '1rem', fontSize: '2rem', color: '#007bff'}}>Please Register</Card.Title>
+        <Card.Title style={{textAlign: 'center', marginBottom: '.5rem', fontSize: '2rem', color: '#007bff'}}>Please Register</Card.Title>
           <Form onSubmit={handleSubmit}>
+            
+          <Form.Group controlId="formBasicText" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <Form.Label style={{ textAlign: 'center', marginBottom: '.1rem', marginTop: '1rem', fontSize: '1rem', color: '#007bff', transition: 'color 0.2s ease-in-out' }}
+                onMouseEnter={(e) => e.target.style.color = '#6c757d'}
+                onMouseLeave={(e) => e.target.style.color = '#007bff'}
+
+            >  Your Name Please* </Form.Label>
+
+            <Form.Control type="text" placeholder="Enter Your Name" name='name' required />
+            </Form.Group>
+            
             <Form.Group controlId="formBasicEmail" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Form.Label style={{ textAlign: 'center', marginBottom: '1rem', marginTop: '1rem', fontSize: '1rem', color: '#007bff', transition: 'color 0.2s ease-in-out' }}
+            <Form.Label style={{ textAlign: 'center', marginBottom: '.1rem', marginTop: '1rem', fontSize: '1rem', color: '#007bff', transition: 'color 0.2s ease-in-out' }}
                 onMouseEnter={(e) => e.target.style.color = '#6c757d'}
                 onMouseLeave={(e) => e.target.style.color = '#007bff'}
 
@@ -90,7 +112,7 @@ const Register = () => {
             <Form.Control type="email" placeholder="Enter email" onChange={handleEmailChange} name='email' required />
             </Form.Group>
             <Form.Group controlId="formBasicPassword" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Form.Label style={{ textAlign: 'center', marginBottom: '1rem', marginTop: '1rem', fontSize: '1rem', color: '#007bff', transition: 'color 0.2s ease-in-out' }}
+            <Form.Label style={{ textAlign: 'center', marginBottom: '.1rem', marginTop: '1rem', fontSize: '1rem', color: '#007bff', transition: 'color 0.2s ease-in-out' }}
                 onMouseEnter={(e) => e.target.style.color = '#6c757d'}
                 onMouseLeave={(e) => e.target.style.color = '#007bff'}
 
